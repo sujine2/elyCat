@@ -1,15 +1,16 @@
 import React from 'react';
 import './starView.css';
 import ViewModal from '../components/Modal';
+import LoadWallet from '../components/LoadWallet';
 import Meteoro from '../components/Meteoro';
 import plus from '../img/plus.png';
-import Star2 from '../img/star2.png';
 import FormModal from '../components/FormModal';
 import Search from '../img/search.png';
 import jquery from 'jquery';
 import $ from 'jquery';
+import { ethers } from 'ethers';
 
-//import $ from 'https://code.jquery.com/jquery-3.2.1.slim.min.js';
+
 
 
 function setSearchBarShow() {
@@ -105,7 +106,21 @@ function StarView() {
       </div>
 
       <div className='form'>
-        <img src={plus} onClick={() => setFormModalShow(true)}/>
+        <img  src={plus} id='plusbtn' onClick={() => { 
+          if(window.ethereum){
+            try{
+              window.ethereum.enable();
+            }catch (error) {
+              console.log(error);
+            }
+          } else if (window.web3) {
+            console.log('check');
+            const provider = new ethers.providers.Web3Provider(window.ethereum);
+        
+          }else {
+            console.log('Non-Ethereum browser detected. You should consider trying MetaMask!');
+          }
+          setFormModalShow(true)}} />
         <FormModal
         show={formModalShow}
         onHide={() => setFormModalShow(false)}/>
@@ -124,3 +139,5 @@ function StarView() {
   );
 }
 export default StarView;
+
+
