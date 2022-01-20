@@ -6,3 +6,26 @@
 #contained-modal-title-vcenter {
     font-family: 'Luxurious Roman', cursive;
 }
+
+.modalTitle {
+    float: left;
+    width: 60%;
+    font-family: 'Luxurious Roman', cursive;
+    font-size: 30px;
+    font-weight: 10px;
+}
+
+.currentColor {
+    float: left;
+    width: 40%;
+    font-family: 'Luxurious Roman', cursive;
+    font-size: 20px;
+}
+
+.printColor {
+    width: 20px;
+    height: 20px;
+    margin-left: 20px;
+    border-radius: 200%;
+    box-shadow: 1px 1px 10px gray;
+}

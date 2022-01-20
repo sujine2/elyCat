@@ -1,43 +1,23 @@
 import { Modal,Button, Form } from "react-bootstrap";
-import React from 'react';
+import React, {useEffect} from 'react';
 import './FormModal.css';
 import {address, abi} from '../components/contract/contractInfo';
-import { Contract, ethers } from "ethers";
+import { ethers } from "ethers";
+import RGBtoHex from "./RGBtoHex";
+import { blue } from "@material-ui/core/colors";
 //import { useWeb3React } from "@web3-react/core";
 
 
-const provider = new ethers.providers.Web3Provider(window.ethereum)
-console.log(provider);
-const contract = new ethers.Contract(address, abi, provider);
-const signer = provider.getSigner(); 
-const contractWithSigner = contract.connect(signer);
-/* contractWithSigner.estimateGas.getColor().then((result) => {
-  console.log(result);
-  console.log(ethers.BigNumber.from(result))
-}).catch((e) => {
-  console.log(e);
-}) 
- */
 
-
-//console.log(color);
-console.log(contract);
-console.log(signer);
-console.log(window.ethereum);
-
-const viewColor = async ()=> {
-  try {
-    console.log(await contract.getOwner());
-    const color = (await contract.getOwner());
-    //awiat 
-    console.log(color);
-    
-  } catch (error) {
-    console.log(error)
-  }
-}
- 
 function FormModal(props) {
+
+  const viewColor = async () => {
+    const provider = new ethers.providers.Web3Provider(window.ethereum)
+    const contract = new ethers.Contract(address, abi, provider);
+    const color = await contract.getColor();
+    return color;
+  }
+
 
   const [inputs, setInputs] = React.useState({
     catName: '',
@@ -49,6 +29,16 @@ function FormModal(props) {
   });
 
   const {catName, yourName, dayMet, favorite, comment} = inputs;
+  const [colors, setColors] = React.useState([]);
+
+  useEffect(() => {
+    const f = async () => {
+      const result = await viewColor();
+      //console.log(result);
+      setColors(result);
+    }
+    f();
+  }, []);
 
 
   const onChange = (e) => {
@@ -57,7 +47,8 @@ function FormModal(props) {
       ...inputs,
       [name] : value
     });
-  };
+  }
+
 
   return (
       <Modal
@@ -67,18 +58,28 @@ function FormModal(props) {
       centered
     >
       <Modal.Header closeButton>
-        <Modal.Title id="contained-modal-title-vcenter">
-          Your Cat Star's Infos
-        </Modal.Title>
+        <div className="modalTitle">
+            Your Cat Star's Infos
+        </div>
+        <div className="currentColor"> 
+          Current Color  :
+          {
+            console.log(colors.R, colors.G, colors.B)
+          }
+          <button className="printColor" style={{
+              backgroundColor: 'rgba('+ colors.R +','+ colors.G +',' + colors.B + ')',
+              border: 0,
+              outline: 0
+              }}></button> 
+              <RGBtoHex className="hexColor" R={colors.R} G={colors.G} B={colors.B}></RGBtoHex>
+          </div>
+        
+      
       </Modal.Header>
       <Modal.Body>
           <div className="formModalBody">
-            {
-              viewColor()
-            }
-              
             <h4>Cat's name</h4>
-            <input name="catName" type="text" placeholder="Normal text" style={{width: 400, position: "relative"}} onChange={onChange}   value={catName}/>
+            <input name="catName" type="text" placeholder="Normal text" style={{width: 400}} onChange={onChange}   value={catName}/>
             <br /><br />
             <h4>Your Name</h4>
             <input name="yourName" type="text" placeholder="Normal text" style={{width: 400}} onChange={onChange}   value={yourName}/>
@@ -93,19 +94,25 @@ function FormModal(props) {
             <input name="comment" type="text" placeholder="Normal text" style={{width: 400}} onChange={onChange}  value={comment}/>
             <br /><br />
             {
-              console.log({catName},{yourName},{dayMet},{favorite},{comment})
+              //console.log({catName},{yourName},{dayMet},{favorite},{comment})
             }
+
+
           </div>
       </Modal.Body>
       <Modal.Footer>
-        <Button onClick={async () => {
-          console.log(dayMet,comment);
-          console.log(typeof({dayMet}),typeof({comment}));
-          let test = new Number({dayMet});
-          console.log({test});
-          
-          //let tx = await contractWithSigner.mint(catName,yourName,comment,favorite,dayMet,0);
-          //console.log(tx);
+        <Button onClick={async()=> {
+          console.log(typeof(dayMet))
+          const provider = new ethers.providers.Web3Provider(window.ethereum)
+          const contract = new ethers.Contract(address, abi, provider);
+          const signer = provider.getSigner(); 
+          const contractWithSigner = contract.connect(signer);
+          console.log(contractWithSigner.catData);
+          const tx = await contractWithSigner.mint(catName,yourName,comment,favorite,parseInt(dayMet),0);
+          console.log(tx);
+          const receipt = await tx.wait();
+          console.log(receipt);
+          window.location.reload();
         }}>Make a star</Button>
       </Modal.Footer>
     </Modal>
