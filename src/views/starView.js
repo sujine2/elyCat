@@ -106,10 +106,10 @@ function StarView() {
       </div>
 
       <div className='form'>
-        <img  src={plus} id='plusbtn' onClick={() => { 
+        <img  src={plus} id='plusbtn' onClick={async() => { 
           if(window.ethereum){
             try{
-              window.ethereum.enable();
+              await window.ethereum.request({ method: 'eth_requestAccounts' });
             }catch (error) {
               console.log(error);
             }
