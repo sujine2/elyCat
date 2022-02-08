@@ -2,18 +2,20 @@
 import React from 'react';
 import './Meteoro.css';
 
+var numeroAleatorio = 5000;
+
 function getRandomArbitrary(min, max) {
     return Math.floor(Math.random() * (max - min)) + min;
 }
 
+setTimeout(function(){ 
+    carregarMeteoro();
+}, numeroAleatorio);
 
 function carregarMeteoro(){
     var style = ["style1", "style2", "style3", "style4"];
-    var numeroAleatorio = 5000;
+    setTimeout(carregarMeteoro, numeroAleatorio);
     numeroAleatorio = getRandomArbitrary(5000, 10000);
-    setTimeout(function(){ 
-        carregarMeteoro();
-    }, numeroAleatorio);
 
     return (
         <div className="chuvaMeteoro">{
@@ -21,14 +23,17 @@ function carregarMeteoro(){
               return <div className={"meteoro "+ style[getRandomArbitrary(0, 4)]}></div>
             })
         }
+        {
+        setTimeout(function(){
+            document.getElementsByClassName('chuvaMeteoro').innerHTML = "";
+            }, 1000)
+        }
         </div>
+        
         
     );
 }
 
-setTimeout(function(){
-    document.getElementsByClassName('chuvaMeteoro')[0].innerHTML = ""
-}, 1000);
 
 
 export default carregarMeteoro;

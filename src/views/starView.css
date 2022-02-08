@@ -39,9 +39,9 @@
 .view-estrela.style3 { animation-duration: 2.5s; animation-name: view-estrelaDestacada; }
 .view-estrela.style4 { animation-duration: 2s; animation-name: view-estrelaDestacada; }
 
-.view-estrela.tam1 { width: 1px; height: 1px; }
-.view-estrela.tam2 { width: 2px; height: 2px; }
-.view-estrela.tam3 { width: 3px; height: 3px; }
+.view-estrela.tam1 { width: 2px; height: 2px; }
+.view-estrela.tam2 { width: 3px; height: 3px; }
+.view-estrela.tam3 { width: 4px; height: 4px; }
 
 .view-estrela.opacity1 { opacity:  1; }
 .view-estrela.opacity2 { opacity: .5; }

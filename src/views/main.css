@@ -93,10 +93,6 @@ html, body {
 }
 
 
-.desCon {
-  width: 100%;
-}
-
 .imgCon {
   width: 100%;
   text-align:center; 
@@ -155,6 +151,7 @@ html, body {
 }
 
 .des{
+  text-align: center;
   font-size: 25px;
   opacity: 0.8;
 }

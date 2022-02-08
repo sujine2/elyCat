@@ -1,6 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Luxurious+Roman&family=Poppins:wght@300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700&display=swap');
+@forward "node_modules/bootstrap/scss/bootstrap";
+
+
+
+
 .formModalBody {
     font-family: 'Luxurious Roman', cursive;
+    font-family: 'Noto Serif KR', serif;
+    width: 100%;
+    
 }
 
 #contained-modal-title-vcenter {
@@ -22,10 +31,38 @@
     font-size: 20px;
 }
 
+.changeColor {
+    width: 20px;
+    height: 20px;
+    margin-left: 20px;
+    margin-right: 10px;
+}
+
 .printColor {
     width: 20px;
     height: 20px;
     margin-left: 20px;
     border-radius: 200%;
     box-shadow: 1px 1px 10px gray;
+}
+
+.changeColorCon{
+    display: none;
+}
+
+.inputData{
+    border-top: 0;
+    border-left: 0;
+    border-right: 0;
+    width: 40%;
+}
+
+h4 {
+    font-size: 20px;
+    font-weight: 500;
+}
+
+
+.modal-content{
+    box-shadow: "";
 }

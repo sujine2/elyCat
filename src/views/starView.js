@@ -18,9 +18,19 @@ import { hexToRgb } from '@material-ui/core';
 function setSearchBarShow() {
   if ($('.search-container').css('display') == 'block') {
     $('.search-container').css('display', 'none');
-    window.location.reload();
+    // window.location.reload();
   } else {
     $('.search-container').css('display', 'block');
+  }
+}
+
+function componentToHex(c) {
+  //console.log("componentToHex");
+  //console.log(typeof(c));
+  //console.log("pppppppp");
+  if(c!= undefined){
+    var hex = c.toString(16);
+    return hex.length === 1 ? "0" + hex : hex;
   }
 }
 
@@ -28,16 +38,31 @@ function getRandomArbitrary(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
 }
 
+
+
+
+
+
 function StarView() {
-  const [modalShow, setModalShow] = React.useState({
-    setShow: false,
-    id: ''
-  });
+  const [modalShow, setModalShow] = React.useState({ setShow: false,id: ''});
   const {setShow,id} = modalShow;
   const [account, setAccount] = React.useState(['']);
   const [myColor, setMyColor] = React.useState(['']);
   const [formModalShow, setFormModalShow] = React.useState(false);
-  const [tokenID, setTokenID] = React.useState([]);
+  const [tokenID, setTokenID] = React.useState('');
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [test, setTest] = React.useState([
+    {
+      styleClass : "",
+      inlineStyle :{ 
+        animationDelay: "0s",
+            left: 0,
+            top: 0,
+            opacity : 0,
+      }
+    }
+
+  ]);
 
   var style = ["style1", "style2", "style3", "style4"];
   var tam = ["tam1", "tam1", "tam1", "tam2", "tam3"];
@@ -74,6 +99,7 @@ function StarView() {
   const findColor = async (_findColor) => {
     const abiCoder = ethers.utils.defaultAbiCoder;
     const colorIndex = ethers.utils.keccak256(abiCoder.encode(["uint","uint","uint"], [_findColor.R, _findColor.G, _findColor.B]));
+    
     const provider = new ethers.providers.Web3Provider(window.ethereum)
     const contract = new ethers.Contract(address, abi, provider);
     const colorOwner = await contract.whoColorOf(colorIndex);
@@ -81,15 +107,23 @@ function StarView() {
     if(colorOwner == 0x0) {
       alert("It's not exist color code");
     }
-    var catList = [];
-    for (var i = 0; i < tokenID; i++){
-      var data = await contract.catDataOf(i);
-      if (data.owner == colorOwner){
-        catList.push(i);
+    else {
+      var catList = [];
+    //var dataList = [];
+      for (var i = 0; i < tokenID; i++){
+        var data = await contract.catDataOf(i);
+        console.log(i, data);
+
+        if (data!=='' && (data.catColor.R === _findColor.R) && (data.catColor.G === _findColor.G) && (data.catColor.B === _findColor.B)){
+          //console.log(_findColor, data.catColor);
+          catList.push(i);
+        }
+        data ='';
       }
+      console.log('list',catList);
+      return catList;
     }
-    console.log(catList);
-    return catList;
+    
   }
 
   const search = async() => {
@@ -97,179 +131,255 @@ function StarView() {
     console.log(searchInputs);
     const hexTorgb = hexToRGB(searchInputs);
     console.log(hexTorgb);
-    console.log(hexTorgb.R);
+    //console.log(hexTorgb.R);
     if(hexTorgb != null){
       var list = await findColor(hexTorgb);
       for(var i in list){
-        console.log(i);
-        $('#'+i).css('width', '20px');
-        $('#'+i).css('height', '20px');
-        $('#'+i).css('background-color', $('.search-bar').val());
-        $('#'+i).css('box-shadow:', '0px 0px 30px 3px rgba('+ hexTorgb.R +','+ hexTorgb.G +',' + hexTorgb.B + ')');
+        console.log('list',list)
+        //console.log('i : ',list[i]);
+        $('#'+list[i]).css('width', '20px');
+        $('#'+list[i]).css('height', '20px');
+        $('#'+list[i]).css('@keyframes view-estrela', `0% {
+          box-shadow: 0 0 15px 0px rgba('`+ hexTorgb.R +','+ hexTorgb.G +',' + hexTorgb.B + ');'+
+        `}
+        20% {
+          box-shadow: 0 0 40px 9px rgba('`+ hexTorgb.R +','+ hexTorgb.G +',' + hexTorgb.B + ');'+
+        `}
+        50% {
+          box-shadow: 0 0 15px 0px rgba('`+ hexTorgb.R +','+ hexTorgb.G +',' + hexTorgb.B + ');'+
+        `}
+        70% {
+          box-shadow: 0 0 50px 10px rgba('`+ hexTorgb.R +','+ hexTorgb.G +',' + hexTorgb.B + ');'+
+        `}
+        90% {
+          box-shadow: 0 0 15px 0px rgba('`+ hexTorgb.R +','+ hexTorgb.G +',' + hexTorgb.B + ');'+
+        `}
+        100% {
+          box-shadow: 0 0 20px 2px rgba('`+ hexTorgb.R +','+ hexTorgb.G +',' + hexTorgb.B + ');' +
+        `}`); 
+        //$('#'+i).css('background-color', $('.search-bar').val());
+        //$('#'+i).css('box-shadow:', '0px 0px 30px 3px rgba('+ hexTorgb.R +','+ hexTorgb.G +',' + hexTorgb.B + ')');
       }
     }
     
   }
 
-  useEffect(() => {
-    const f = async () => {
-      const ID = await getTokenNum();
-      console.log('view Token! : ', ID);
-      setTokenID(ID);
-    }
-    f();
-  }, []);
+
+  const fff = () => {
+    setTest(Array(tokenID).fill(0).map(() => {
+      //console.log("진입");
+      //console.log("진입 이후",tokenID)
+      return {
+        styleClass : "view-estrela "+ style[getRandomArbitrary(0, 4)] + " "
+        + opacity[getRandomArbitrary(0, 6)] + " " + tam[getRandomArbitrary(2, 5)] + " ",
+        
+        inlineStyle :{ animationDelay: getRandomArbitrary(0, 9) + "s",
+              left: getRandomArbitrary(0, widthWindow),
+              top: getRandomArbitrary(0, heightWindow),
+              opacity : [getRandomArbitrary(0, 6)],}
+      }
+    }))
+  }
+
+
+  const ff =async () => {
+    owner = await window.ethereum.request({ method: 'eth_requestAccounts' });
+    owner = owner[Object.keys(owner)[0]];
+    const color = await viewMyColor(owner);
+    setMyColor(color);
+    console.log('000',color)
+  }
+
+  const f =async () => {
+    const ID = await getTokenNum();
+    console.log('view Token! : ', ID);
+    setTokenID(ID);
+  }
+
 
   useEffect(() => {
-    const ff =async () => {
-      owner = await window.ethereum.request({ method: 'eth_requestAccounts' });
-      owner = owner[Object.keys(owner)[0]];
-      const color = await viewMyColor(owner);
-      setMyColor(color);
-      console.log('000',color)
-    }
+    f();
+    if(tokenID != ''){
+      fff();
+      setIsLoading(true);
+    }  
+  }, [tokenID]);
+
+
+  useEffect(() => {
     ff();
-  }, [owner])
+  }, [owner]);
   
+  // useEffect(() => {
+    
+    
+  //     setTest(Array(tokenID).fill(0).map(() => {
+  //       console.log("진입");
+  //       console.log("진입 이후",tokenID)
+  //       return {
+  //         styleClass : "view-estrela "+ style[getRandomArbitrary(0, 4)] + " "
+  //         + opacity[getRandomArbitrary(0, 6)] + " " + tam[getRandomArbitrary(2, 5)] + " ",
+          
+  //         // inlineStyle :{ animationDelay: getRandomArbitrary(0, 9) + "s",
+  //         //       left: getRandomArbitrary(0, widthWindow),
+  //         //       top: getRandomArbitrary(0, heightWindow),
+  //         //       opacity : [getRandomArbitrary(0, 6)],}
+  //       }
+  //     }))
+
+
+
+  // },[test, tokenID])
+
 
   return (
-    <div className="view-planet">
-      <div className="view-constelacao">
- 
-        {
-
-          Array(350).fill(0).map((_,index) => {
-            return <span id={index} className={"view-estrela "+ style[getRandomArbitrary(0, 4)]+ " " 
-              + opacity[getRandomArbitrary(0, 6)] + " " + tam[getRandomArbitrary(2, 5)] + " "} 
-              style onClick={() => {
-                setModalShow({
-                  setShow: true,
-                  id: index
-                });
-              }} 
-              style={{
-                animationDelay: getRandomArbitrary(0, 9) + "s",
-                left: getRandomArbitrary(0, widthWindow),
-                top: getRandomArbitrary(0, heightWindow),
-                opacity : [getRandomArbitrary(0, 6)]
-            }}></span>
-          })
-      
-      }
-      
+    <>
       {
-        Array(350).fill(0).map((_,index) => {
-          return <span className={"view-estrela "+ style[getRandomArbitrary(0, 4)]+ " " 
-            + opacity[getRandomArbitrary(0, 6)] + " " + tam[getRandomArbitrary(0, 5)] + " "} 
-            style onClick={() => setModalShow(true)} 
-            style={{
-              animationDelay: getRandomArbitrary(0, 9) + "s",
-              left: getRandomArbitrary(0, widthWindow),
-              top: getRandomArbitrary(350, 450),
-              opacity : [getRandomArbitrary(0, 6)]
-          }}></span>
-        })
-      }
-      {
-        Array(150).fill(0).map((_,index) => {
-          return <span className={"view-estrela "+ style[getRandomArbitrary(0, 4)]+ " " 
-            + opacity[getRandomArbitrary(0, 6)] + " " + tam[getRandomArbitrary(0, 5)] + " "} 
-            style onClick={() => setModalShow(true)} 
-            style={{
-              animationDelay: getRandomArbitrary(0, 9) + "s",
-              left: getRandomArbitrary(0, widthWindow),
-              top: getRandomArbitrary(200, 300),
-              opacity : [getRandomArbitrary(0, 6)]
-          }}></span>
-        })
-      }
-      {
-        Array(150).fill(0).map((_,index) => {
-          return <span className={"view-estrela "+ style[getRandomArbitrary(0, 4)]+ " " 
-            + opacity[getRandomArbitrary(0, 6)] + " " + tam[getRandomArbitrary(0, 5)] + " "} 
-            style onClick={() => setModalShow(true)} 
-            style={{
-              animationDelay: getRandomArbitrary(0, 9) + "s",
-              left: getRandomArbitrary(0, widthWindow),
-              top: getRandomArbitrary(300, 400),
-              opacity : [getRandomArbitrary(0, 6)]
-          }}></span>
-        })
-      }  
-      <ViewModal
-              show={setShow}
-              onHide={() => setModalShow({
-                setShow: false,
-                id:''
-              })}
-              tokenid={id}
-            />
-      </div>
-      <Meteoro></Meteoro>
-
-
-
-
-      <div className="floresta">
-        <img src="https://raw.githubusercontent.com/interaminense/starry-sky/master/src/img/bgTree.png" alt="" />
-      </div>
-
-      <div className='form'>
-        <img  src={plus} id='plusbtn' onClick={async() => { 
-          if(window.ethereum){
-            try{
-              const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-              setAccount(accounts);
-              console.log(accounts);
-              window.ethereum.on('accountsChanged', function (accounts) {
-                // Time to reload your interface with accounts[0]!
+        !isLoading ? (
+          <div />
+        ) : (
+          <div className="view-planet">
+          <div className="view-constelacao">
+            
+     
+            {
+              Array(tokenID).fill(0).map((_,index) => {
+                //console.log('-------',test, tokenID);
+                return <span id={index} 
+                className={test[index].styleClass} 
+                onClick={(e) => {
+                  e.preventDefault();
+                    setModalShow({
+                      setShow: true,
+                      id: index
+                    });
+                }} 
+                style={test[index].inlineStyle}></span>
               })
-            }catch (error) {
-              console.log(error);
-            }
-          } else if (window.web3) {
-            console.log('check');
-            const provider = new ethers.providers.Web3Provider(window.ethereum);
-          }else {
-            console.log('Non-Ethereum browser detected. You should consider trying MetaMask!');
-          }  
-          setFormModalShow(true)}} />
-
-        <FormModal
-        show={formModalShow}
-        onHide={() => setFormModalShow(false)}/>
-        
-   
-        <img className='search' onClick={() => setSearchBarShow()} src={Search}/>
+          }
           
-      </div>
-
-      <div className="myColor"> 
-        {
-          console.log('checkMyColor', myColor.R)
-        }
-        {
-          (myColor.R !== undefined) && (myColor.R !=0) && (myColor.G != 0) && (myColor.B !=0 ) && (
-            <>
-             <div className='myColor'> 
-               My Color
-             </div>
-              <button className="printMyColor" style={{
-              backgroundColor: 'rgba('+ myColor.R +','+ myColor.G +',' + myColor.B + ')',
-              border: 0,
-              outline: 0
-              }}></button>
-              <RGBtoHex className="hexMyColor" R={myColor.R} G={myColor.G} B={myColor.B}></RGBtoHex>
-            </>
-          )
-        }
-      </div>
-
-      <form className="search-container">
-        <input type="text" className="search-bar" placeholder="What is your color?"  />
-        <a onClick={search}><img className="search-icon" src={Search}/></a>
-      </form>
-    </div>
+    {/*
+          {
+            Array(350).fill(0).map((_,index) => {
+              return <span className={"view-estrela "+ style[getRandomArbitrary(0, 4)]+ " " 
+                + opacity[getRandomArbitrary(0, 6)] + " " + tam[getRandomArbitrary(0, 5)] + " "} 
+                style onClick={() => setModalShow(true)} 
+                style={{
+                  animationDelay: getRandomArbitrary(0, 9) + "s",
+                  left: getRandomArbitrary(0, widthWindow),
+                  top: getRandomArbitrary(350, 450),
+                  opacity : [getRandomArbitrary(0, 6)]
+              }}></span>
+            })
+          }
+          {
+            Array(150).fill(0).map((_,index) => {
+              return <span className={"view-estrela "+ style[getRandomArbitrary(0, 4)]+ " " 
+                + opacity[getRandomArbitrary(0, 6)] + " " + tam[getRandomArbitrary(0, 5)] + " "} 
+                style onClick={() => setModalShow(true)} 
+                style={{
+                  animationDelay: getRandomArbitrary(0, 9) + "s",
+                  left: getRandomArbitrary(0, widthWindow),
+                  top: getRandomArbitrary(200, 300),
+                  opacity : [getRandomArbitrary(0, 6)]
+              }}></span>
+            })
+          }
+          {
+            Array(150).fill(0).map((_,index) => {
+              return <span className={"view-estrela "+ style[getRandomArbitrary(0, 4)]+ " " 
+                + opacity[getRandomArbitrary(0, 6)] + " " + tam[getRandomArbitrary(0, 5)] + " "} 
+                style onClick={() => setModalShow(true)} 
+                style={{
+                  animationDelay: getRandomArbitrary(0, 9) + "s",
+                  left: getRandomArbitrary(0, widthWindow),
+                  top: getRandomArbitrary(300, 400),
+                  opacity : [getRandomArbitrary(0, 6)]
+              }}></span>
+            })
+          }    
+        */}
+          </div>
+          <ViewModal
+                show={setShow}
+                onHide={() => setModalShow({
+                    setShow: false,
+                    id:''
+                  })}
+                  tokenid={id}
+                />
+          {/* <Meteoro></Meteoro> */}
+    
+    
+    
+    
+          <div className="floresta">
+            <img src="https://raw.githubusercontent.com/interaminense/starry-sky/master/src/img/bgTree.png" alt="" />
+          </div>
+    
+          <div className='form'>
+            <img  src={plus} id='plusbtn' onClick={async() => { 
+              if(window.ethereum){
+                try{
+                  const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                  setAccount(accounts);
+                  console.log(accounts);
+                  window.ethereum.on('accountsChanged', function (accounts) {
+                    // Time to reload your interface with accounts[0]!
+                  })
+                }catch (error) {
+                  console.log(error);
+                }
+              } else if (window.web3) {
+                console.log('check');
+                const provider = new ethers.providers.Web3Provider(window.ethereum);
+              }else {
+                console.log('Non-Ethereum browser detected. You should consider trying MetaMask!');
+              }  
+              setFormModalShow(true)}} />
+    
+            <FormModal
+            show={formModalShow}
+            onHide={() => setFormModalShow(false)}/>
+            
+       
+            <img className='search' onClick={(e) => {  
+              e.preventDefault();
+              setSearchBarShow()}
+              } src={Search}/>
+              
+          </div>
+    
+          <div className="myColor"> 
+            {
+              console.log('checkMyColor', myColor.R)
+            }
+            {
+              (myColor.R !== undefined) && (myColor.R !=0) && (myColor.G != 0) && (myColor.B !=0 ) && (
+                <>
+                 <div className='myColor'> 
+                   My Color
+                 </div>
+                  <button className="printMyColor" style={{
+                  backgroundColor: 'rgba('+ myColor.R +','+ myColor.G +',' + myColor.B + ')',
+                  border: 0,
+                  outline: 0
+                  }}></button>
+                  <RGBtoHex className="hexMyColor" R={myColor.R} G={myColor.G} B={myColor.B}></RGBtoHex>
+                </>
+              )
+            }
+          </div>
+    
+          <form className="search-container">
+            <input type="text" className="search-bar" placeholder="What is your color?"  />
+            <a onClick={search}><img className="search-icon" src={Search}/></a>
+          </form>
+        </div>
+        )
+      }
+    </>
+   
   );
 }
 export default StarView;
