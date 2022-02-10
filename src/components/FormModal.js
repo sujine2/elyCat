@@ -21,19 +21,23 @@ function componentToHex(c) {
 }
 
 
+
 function FormModal(props) {
   const [inputs, setInputs] = React.useState({
     catName: '',
     yourName: '',
     dayMet: '',
     favorite: '',
-    comment: ''
+    comment: '',
+    imgURL: ''
 
   });
 
-  const {catName, yourName, dayMet, favorite, comment} = inputs;
+  const {catName, yourName, dayMet, favorite, comment, imgURL} = inputs;
   const [colors, setColors] = React.useState([]);
   const [colorValue, setColorValue] = React.useState();
+  const [colorDup, setColorDup] = React.useState(true);
+
 
   useEffect(() => {
     const f = async () => {
@@ -61,7 +65,7 @@ function FormModal(props) {
     });
   }
 
-  const [colorDup, setColorDup] = React.useState(true);
+  
 
   const hexToRGB = (_findColor) => {
     var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(_findColor);
@@ -95,7 +99,6 @@ function FormModal(props) {
     return color;
   }
 
-    
   setTimeout(function(){
     //console.log("I am the third log after 3 seconds");
     $('.changeColor').change(async function (){
@@ -103,7 +106,6 @@ function FormModal(props) {
       setColorValue($('.changeColor').val());
       const rgbColor = await hexToRGB($('.changeColor').val());
       await findColor(rgbColor);
-  
       //console.log('isColor',colorDup);
     })
 
@@ -120,6 +122,7 @@ function FormModal(props) {
     }
   },[colorDup]);
 
+  var tmp;
 
   return (
       <Modal
@@ -167,6 +170,10 @@ function FormModal(props) {
               color: "red",
               fontSize: 12
             }} className="isColorDup"></span>
+            {
+            tmp = hexToRGB(colorValue),
+            tmp && (
+            console.log('color Value',tmp))}
           </div>
           
         </div>
@@ -175,31 +182,28 @@ function FormModal(props) {
       </Modal.Header>
       <Modal.Body>
           <div className="formModalBody">
-            <h4>Cat's name</h4>
-            <input className="inputData" name="catName" type="text" style={{width: 400}} onChange={onChange}   value={catName}    required />
-            <br /><br />
-            <h4>Your Name</h4>
-            <input className="inputData" name="yourName" type="text" style={{width: 400}} onChange={onChange}   value={yourName}   required />
-            <br /><br />
-            <h4>The day I met a cat</h4>
-            <input className="inputData" name="dayMet" type="number" placeholder="ex)20210510" style={{width: 400}} onChange={onChange}   value={dayMet}    required />
-            <br /><br />
-            <h4>What my cat likes</h4>
-            <input className="inputData" name="favorite" type="text" style={{width: 400}} onChange={onChange}  value={favorite}   required />
-            <br /><br />
-            <h4>Comment</h4>
-            <input className="inputData" name="comment" type="text" style={{width: 400}} onChange={onChange}  value={comment}   required />
-            <br /><br />
-            <h4>Image Link</h4>
-            <input className="inputData" name="image" type="text" placeholder="google dirve **전체 공유 링크를** 넣어주세요!" style={{width: 400}} />
-            <br /><br />
-            {
-              //console.log({catName},{yourName},{dayMet},{favorite},{comment})
-            }
-{/*             <img style={{
-              width : 500,
-              height : 500
-            }} src={"https://drive.google.com/uc?export=view&id=11ie-eM87PwR54QDNVFoGYAqVDu-7MQPZ"}></img> */}
+            <div className="catInfoForm">
+
+              <h4>Cat's name  </h4>
+              <input className="inputData" name="catName" type="text" style={{width: 400}} onChange={onChange}   value={catName}    required />
+              <br /><br />
+              <h4>Your Name  </h4>
+              <input className="inputData" name="yourName" type="text" style={{width: 400}} onChange={onChange}   value={yourName}   required />
+              <br /><br />
+              <h4>The day I met a cat  </h4>
+              <input className="inputData" name="dayMet" type="number" placeholder="ex)20210510" style={{width: 400}} onChange={onChange}   value={dayMet}    required />
+              <br /><br />
+              <h4>What my cat likes </h4>
+              <input className="inputData" name="favorite" type="text" style={{width: 400}} onChange={onChange}  value={favorite}   required />
+              <br /><br />
+              <h4>Comment  </h4>
+              <input className="inputData" name="comment" type="text" style={{width: 400}} onChange={onChange}  value={comment}   required />
+              <br /><br />
+              <h4>Image Link  </h4>
+              <input className="inputData" name="imgURL" type="text" placeholder="google dirve **전체 공유 링크를** 넣어주세요!" style={{width: 400}}
+              onChange={onChange}  value={imgURL}  />
+              <br /><br />
+            </div>
           </div>
       </Modal.Body>
       <Modal.Footer>
@@ -213,7 +217,17 @@ function FormModal(props) {
             const signer = provider.getSigner(); 
             const contractWithSigner = contract.connect(signer);
             console.log(contractWithSigner.catData);
-            const tx = await contractWithSigner.mint(catName,yourName,comment,favorite,parseInt(dayMet),0);
+            var tx
+            var fin
+            if($('.changeColorCheck').is(':checked')){
+              //fin = hexToRGB(colorValue)
+              console.log('최종',tmp)
+              tmp && (
+              tx = await contractWithSigner.mint(catName,yourName,comment,favorite,parseInt(dayMet),imgURL,tmp.R,tmp.G,tmp.B));
+            }else 
+            {
+              tx = await contractWithSigner.mint(catName,yourName,comment,favorite,parseInt(dayMet),imgURL,-1,-1,-1);
+            }
             console.log(tx);
             const receipt = await tx.wait();
             console.log(receipt);

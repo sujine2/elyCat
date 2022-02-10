@@ -1,22 +1,22 @@
 
-export const address ='0xDA08fE7d1785301f70c2E2C23A6147Eb49b32FA0';
+export const address ='0xbf28173B08AA21F9136D882d41469A770E604162';
 export const abi = [
   {
     "inputs": [
       {
-        "internalType": "uint8",
+        "internalType": "int16",
         "name": "R",
-        "type": "uint8"
+        "type": "int16"
       },
       {
-        "internalType": "uint8",
+        "internalType": "int16",
         "name": "G",
-        "type": "uint8"
+        "type": "int16"
       },
       {
-        "internalType": "uint8",
+        "internalType": "int16",
         "name": "B",
-        "type": "uint8"
+        "type": "int16"
       },
       {
         "internalType": "bool",
@@ -182,11 +182,6 @@ export const abi = [
             "type": "uint32"
           },
           {
-            "internalType": "uint32",
-            "name": "leftDay",
-            "type": "uint32"
-          },
-          {
             "internalType": "address",
             "name": "owner",
             "type": "address"
@@ -194,29 +189,29 @@ export const abi = [
           {
             "components": [
               {
-                "internalType": "uint8",
+                "internalType": "int16",
                 "name": "R",
-                "type": "uint8"
+                "type": "int16"
               },
               {
-                "internalType": "uint8",
+                "internalType": "int16",
                 "name": "G",
-                "type": "uint8"
+                "type": "int16"
               },
               {
-                "internalType": "uint8",
+                "internalType": "int16",
                 "name": "B",
-                "type": "uint8"
-              },
-              {
-                "internalType": "bool",
-                "name": "set",
-                "type": "bool"
+                "type": "int16"
               }
             ],
             "internalType": "struct mintNFT.color",
             "name": "catColor",
             "type": "tuple"
+          },
+          {
+            "internalType": "string",
+            "name": "imgURL",
+            "type": "string"
           }
         ],
         "internalType": "struct mintNFT.catData",
@@ -253,24 +248,19 @@ export const abi = [
       {
         "components": [
           {
-            "internalType": "uint8",
+            "internalType": "int16",
             "name": "R",
-            "type": "uint8"
+            "type": "int16"
           },
           {
-            "internalType": "uint8",
+            "internalType": "int16",
             "name": "G",
-            "type": "uint8"
+            "type": "int16"
           },
           {
-            "internalType": "uint8",
+            "internalType": "int16",
             "name": "B",
-            "type": "uint8"
-          },
-          {
-            "internalType": "bool",
-            "name": "set",
-            "type": "bool"
+            "type": "int16"
           }
         ],
         "internalType": "struct mintNFT.color",
@@ -359,9 +349,24 @@ export const abi = [
         "type": "uint32"
       },
       {
-        "internalType": "uint32",
-        "name": "leftDay",
-        "type": "uint32"
+        "internalType": "string",
+        "name": "imgURL",
+        "type": "string"
+      },
+      {
+        "internalType": "int16",
+        "name": "R",
+        "type": "int16"
+      },
+      {
+        "internalType": "int16",
+        "name": "G",
+        "type": "int16"
+      },
+      {
+        "internalType": "int16",
+        "name": "B",
+        "type": "int16"
       }
     ],
     "name": "mint",
@@ -377,34 +382,12 @@ export const abi = [
         "type": "address"
       }
     ],
-    "name": "myColorOf",
+    "name": "myStarOf",
     "outputs": [
       {
-        "components": [
-          {
-            "internalType": "uint8",
-            "name": "R",
-            "type": "uint8"
-          },
-          {
-            "internalType": "uint8",
-            "name": "G",
-            "type": "uint8"
-          },
-          {
-            "internalType": "uint8",
-            "name": "B",
-            "type": "uint8"
-          },
-          {
-            "internalType": "bool",
-            "name": "set",
-            "type": "bool"
-          }
-        ],
-        "internalType": "struct mintNFT.color",
+        "internalType": "uint256[]",
         "name": "",
-        "type": "tuple"
+        "type": "uint256[]"
       }
     ],
     "stateMutability": "view",

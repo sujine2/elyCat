@@ -1,11 +1,44 @@
 @import url('https://fonts.googleapis.com/css2?family=Luxurious+Roman&family=Poppins:wght@300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700&display=swap');
 
 .catInfo {
     font-family: 'Luxurious Roman', cursive;
+    font-family: 'Noto Serif KR', serif;
     font-size: 20px;
+    float: left;
+    width: 40%;
+    padding-left: 5%;
+    padding-right: 5%;
 }
 
+.dataImg{
+    float: left;
+    width: 50%;
+    
+}
+
+.infoTitle{
+    font-family: 'Noto Serif KR', serif;
+    margin-left: 20px;
+}
+
+.dataImg img{
+    max-width: 100%;
+    width: auto !important;
+    height: auto !important;
+    border-radius: 40px;
+}
 
 .btn-close{
     margin-left: 10;
+}
+
+
+.dataComment {
+    text-align: center;
+    margin-left: 5%;
+    margin-right: 14%;
+    border-style: dashed;
+    border-radius: 40px;
+    padding: 10px;
 }

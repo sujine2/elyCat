@@ -29,6 +29,9 @@ function componentToHex(c) {
 
 
 function ViewModal(props) {
+  var url
+
+
  
   const viewCatData = async () => {
     const id = props.tokenid;
@@ -73,16 +76,14 @@ function ViewModal(props) {
       {
         console.log(props.tokenid)
       }
-      {
-        console.log(catData)
-      }
+
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter" style={{
           fontSize: 33
         }}>
       
-            <div style={{ float: "left"}}>
-            #{props.tokenid} Cat Stars 
+            <div className='infoTitle'style={{ float: "left"}}>
+            {props.tokenid} 번째 {catData.catName} 별
             </div>
             
             <div style={{ marginLeft: 600, loat: "left"}}>
@@ -93,22 +94,33 @@ function ViewModal(props) {
       </Modal.Header>
       <Modal.Body>
         <div className='catInfo'>
-          <h4>Star's Name : {catData.catName}</h4>
           <br/>
-          <h4>Star's Owner : {catData.yourName}</h4>
+          <h4> 별 소유자 : {catData.yourName}</h4>
           <br/>
-          <h4>The day we met : {catData.metDay}</h4>
+          <h4> 만난 날 : {catData.metDay}</h4>
           <br/>
-          <h4>Favorite Things : {catData.favorite}</h4>
+          <h4> 좋아하는 것 : {catData.favorite}</h4>
+          <br/><br/>
+          <div className="dataComment" >
+            {catData.comment}
+          </div>
           <br/>
-          <h4>Comment : {catData.comment}</h4>
-          <br/>
-
-      <div className="dataImg">
-        
-      </div>
-
         </div>
+        <div className="dataImg">
+          {
+          url = catData.imgURL,
+          console.log('url',url),
+          url && (
+          url = url.split('/'),
+          url = url[5],
+          console.log(url))
+          }
+          <img style={{
+            width : 500,
+            height : 500
+          }} src={"https://drive.google.com/uc?export=view&id=" + url}></img> 
+        </div>
+
       </Modal.Body>
       {/* {
         setTimeout(function(){

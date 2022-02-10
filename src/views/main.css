@@ -13,7 +13,7 @@ html, body {
 }
 
 .planet {
-  background: -webkit-linear-gradient(top, rgb(0, 0, 0) 50%, rgb(25, 19, 39)80%, rgb(43, 32, 72));
+  background: -webkit-linear-gradient(top, rgb(4, 79, 96) 20%, rgb(5, 38, 54)60%, rgb(4, 15, 15));
   width: 100%;
   height: 100%;
   overflow: hidden;
@@ -101,8 +101,8 @@ html, body {
 
 .imgCon img {
   height:auto;
-  width: 200px;
-  height: 200px;
+  width: 290px;
+  height: 290px;
   filter: drop-shadow(3px 3px 20px white);
 }
 

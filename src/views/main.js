@@ -1,6 +1,6 @@
 import React from 'react';
 import './main.css';
-import planet from '../img/planet.png';
+import planet from '../img/catStar.png';
 import rocket from '../img/rocket.png';
 import EventModal from '../components/EventModal';
 import { Link } from 'react-router-dom';
@@ -43,17 +43,17 @@ function Main() {
                     You can keep memories with your cat as a shining star in the night sky.<br/>
                     Shine the stars with your own color. And be with other cat stars.
                 </div>
-                <br></br><br></br><br></br>
+                <br></br><br/>
                 <div className='moveCon'>
                     <Link to="/stars" className='move'> 
                            >> Let's go see the stars <img className="rocket" src={rocket} ></img>
                     </Link>
                 </div>
             </div>
-            <EventModal
+            {/* <EventModal
               show={eventModalShow}
               onHide={setEventModalShow}
-            />
+            /> */}
         </div>
     );
 }

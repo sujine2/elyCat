@@ -18,7 +18,7 @@ import { hexToRgb } from '@material-ui/core';
 function setSearchBarShow() {
   if ($('.search-container').css('display') == 'block') {
     $('.search-container').css('display', 'none');
-    // window.location.reload();
+    window.location.reload();
   } else {
     $('.search-container').css('display', 'block');
   }
@@ -46,10 +46,10 @@ function getRandomArbitrary(min, max) {
 function StarView() {
   const [modalShow, setModalShow] = React.useState({ setShow: false,id: ''});
   const {setShow,id} = modalShow;
-  const [account, setAccount] = React.useState(['']);
-  const [myColor, setMyColor] = React.useState(['']);
+  const [account, setAccount] = React.useState('');
   const [formModalShow, setFormModalShow] = React.useState(false);
-  const [tokenID, setTokenID] = React.useState('');
+  const [viewStar, setViewStar] = React.useState(false);
+  const [tokenID, setTokenID] = React.useState(-1);
   const [isLoading, setIsLoading] = React.useState(false);
   const [test, setTest] = React.useState([
     {
@@ -81,12 +81,41 @@ function StarView() {
     return TokenID;
   }
 
-  const viewMyColor = async (_owner) => {
+  const viewMyStar = async (_owner) => {
     const provider = new ethers.providers.Web3Provider(window.ethereum)
     const contract = new ethers.Contract(address, abi, provider);
-    const myColor = await contract.myColorOf(_owner);
-    return myColor;
+    const myStarList = await contract.myStarOf(_owner);
+    console.log(myStarList);
+
+    if(viewStar == false){
+      setViewStar(true)
+      for(var i in myStarList){
+        console.log('list',myStarList)
+        //console.log('i : ',list[i]);
+        var data = await contract.catDataOf(i);
+
+        $('#'+myStarList[i]).css('width', '20px');
+        $('#'+myStarList[i]).css('height', '20px');
+        $('#'+myStarList[i]).css('background-color',"#"+ componentToHex(data.catColor.R ) + componentToHex(data.catColor.G) + componentToHex(data.catColor.B));
+        $('.myStar').css('opacity','100%');
+        $('.myStar').css('text-shadow','0px 0px 8px white');
+      } 
+    }else if(viewStar == true) {
+      setViewStar(false);
+      for(var i in myStarList){
+        console.log('list',myStarList)
+        //console.log('i : ',list[i]);
+        $('#'+myStarList[i]).css('width', '3px');
+        $('#'+myStarList[i]).css('height', '3px');
+        $('#'+myStarList[i]).css('background-color','white');
+        $('.myStar').css('opacity','60%');
+        $('.myStar').css('text-shadow','');
+      } 
+    }
+    
   }
+
+
   const hexToRGB = (_findColor) => {
     var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(_findColor);
     return result ? {
@@ -185,9 +214,10 @@ function StarView() {
   const ff =async () => {
     owner = await window.ethereum.request({ method: 'eth_requestAccounts' });
     owner = owner[Object.keys(owner)[0]];
-    const color = await viewMyColor(owner);
-    setMyColor(color);
-    console.log('000',color)
+    setAccount(owner);
+    // const color = await viewMyColor(owner);
+    //setMyColor(color);
+    //console.log('000',color)
   }
 
   const f =async () => {
@@ -199,7 +229,7 @@ function StarView() {
 
   useEffect(() => {
     f();
-    if(tokenID != ''){
+    if(tokenID != -1){
       fff();
       setIsLoading(true);
     }  
@@ -210,31 +240,10 @@ function StarView() {
     ff();
   }, [owner]);
   
-  // useEffect(() => {
-    
-    
-  //     setTest(Array(tokenID).fill(0).map(() => {
-  //       console.log("진입");
-  //       console.log("진입 이후",tokenID)
-  //       return {
-  //         styleClass : "view-estrela "+ style[getRandomArbitrary(0, 4)] + " "
-  //         + opacity[getRandomArbitrary(0, 6)] + " " + tam[getRandomArbitrary(2, 5)] + " ",
-          
-  //         // inlineStyle :{ animationDelay: getRandomArbitrary(0, 9) + "s",
-  //         //       left: getRandomArbitrary(0, widthWindow),
-  //         //       top: getRandomArbitrary(0, heightWindow),
-  //         //       opacity : [getRandomArbitrary(0, 6)],}
-  //       }
-  //     }))
-
-
-
-  // },[test, tokenID])
-
 
   return (
     <>
-      {
+      { 
         !isLoading ? (
           <div />
         ) : (
@@ -350,22 +359,14 @@ function StarView() {
               
           </div>
     
-          <div className="myColor"> 
+          <div className="myStarCon"> 
             {
-              console.log('checkMyColor', myColor.R)
-            }
-            {
-              (myColor.R !== undefined) && (myColor.R !=0) && (myColor.G != 0) && (myColor.B !=0 ) && (
+              console.log(account),
+              (account !== '') && (
                 <>
-                 <div className='myColor'> 
-                   My Color
+                 <div className='myStar' onClick={()=> viewMyStar(account)}> 
+                   View My Star
                  </div>
-                  <button className="printMyColor" style={{
-                  backgroundColor: 'rgba('+ myColor.R +','+ myColor.G +',' + myColor.B + ')',
-                  border: 0,
-                  outline: 0
-                  }}></button>
-                  <RGBtoHex className="hexMyColor" R={myColor.R} G={myColor.G} B={myColor.B}></RGBtoHex>
                 </>
               )
             }

@@ -65,4 +65,32 @@ h4 {
 
 .modal-content{
     box-shadow: "";
+    opacity: 80%;
+    border-radius: 40px;
+}
+
+.btn.btn-primary{
+    background: rgb(4, 79, 96);
+    border : 0;
+    border-radius: 40px;
+}
+
+.btn.btn-primary:hover{
+    background: rgb(4, 79, 96);
+    box-shadow: 0 0 15px rgb(4, 79, 96);
+    border : 0;
+}
+
+
+.btn.btn-primary:active, .btn.btn-primary:focus{
+    background: rgb(4, 79, 96);
+    border : 2px;
+}
+
+.catInfoForm input{
+    margin-left: 220px;
+}
+
+.catInfoForm h4{
+    margin-left: 50px;
 }
