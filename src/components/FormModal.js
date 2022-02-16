@@ -6,16 +6,17 @@ import { ethers } from "ethers";
 import RGBtoHex from "./RGBtoHex";
 import jquery from 'jquery';
 import $ from 'jquery';
-import axios from "axios";
+import { klaytn,caver } from '../components/wallet/caver';
+import { InstallKaikas } from '../components/wallet/InstallKaikas.js';
+import { ConnectKaikas } from '../components/wallet/ConnectKaikas.js';
 //import { useWeb3React } from "@web3-react/core";
-
 
 function componentToHex(c) {
   //console.log("componentToHex");
-  //console.log(typeof(c));
   //console.log("pppppppp");
+  //console.log('type',typeof(c))
   if(c!= undefined){
-    var hex = c.toString(16);
+    var hex = parseInt(c,10).toString(16);
     return hex.length === 1 ? "0" + hex : hex;
   }
 }
@@ -44,7 +45,7 @@ function FormModal(props) {
       const result = await viewColor();
 
       if(result){
-      console.log(result);
+      //console.log('result',result);
       setColors(result);
       const tempColorValue = "#"+ componentToHex(result.R) + componentToHex(result.G) + componentToHex(result.B);
       console.log('colorValue:',tempColorValue);
@@ -79,9 +80,9 @@ function FormModal(props) {
   const findColor = async (_findColor) => {
     const abiCoder = ethers.utils.defaultAbiCoder;
     const colorIndex = ethers.utils.keccak256(abiCoder.encode(["uint","uint","uint"], [_findColor.R, _findColor.G, _findColor.B]));
-    const provider = new ethers.providers.Web3Provider(window.ethereum)
-    const contract = new ethers.Contract(address, abi, provider);
-    const colorOwner = await contract.whoColorOf(colorIndex);
+    //const provider = new ethers.providers.Web3Provider(window.ethereum)
+    const contract = new caver.klay.Contract(abi, address);
+    const colorOwner = await contract.methods.whoColorOf(colorIndex).call();
     //console.log(colorOwner);
     if(colorOwner == 0x0) {
       //console.log('alsdj;flajf');
@@ -93,9 +94,9 @@ function FormModal(props) {
 
 
   const viewColor = async () => {
-    const provider = new ethers.providers.Web3Provider(window.ethereum)
-    const contract = new ethers.Contract(address, abi, provider);
-    const color = await contract.getColor();
+    //const provider = new ethers.providers.Web3Provider(window.ethereum)
+    const contract = new caver.klay.Contract(abi, address);
+    const color = await contract.methods.getColor().call();
     return color;
   }
 
@@ -208,30 +209,42 @@ function FormModal(props) {
       </Modal.Body>
       <Modal.Footer>
         <Button onClick={async()=> {
-          if(colorDup == false && $('#ckBox').is(':checked')){
+          console.log('Dup',colorDup, $('.changeColorCheck').is(':checked'));
+          if(colorDup === false && $('.changeColorCheck').is(':checked')){
             alert('이미 사용된 컬러 입니다. 색상을 변경해 주세요.');
           }else {
-            console.log(typeof(dayMet))
-            const provider = new ethers.providers.Web3Provider(window.ethereum)
-            const contract = new ethers.Contract(address, abi, provider);
-            const signer = provider.getSigner(); 
-            const contractWithSigner = contract.connect(signer);
-            console.log(contractWithSigner.catData);
-            var tx
-            var fin
+
+            //console.log('address', klaytn.selectedAddress);
+            //const key = caver.wallet.keyring.generateSingleKey();
+            //const provider = new ethers.providers.Web3Provider(window.ethereum)
+            const contract = new caver.klay.Contract(abi,address);
+            //const contractWithSigner = contract.sign(keyring);
+            //console.log(contractWithSigner.catData);
             if($('.changeColorCheck').is(':checked')){
               //fin = hexToRGB(colorValue)
               console.log('최종',tmp)
               tmp && (
-              tx = await contractWithSigner.mint(catName,yourName,comment,favorite,parseInt(dayMet),imgURL,tmp.R,tmp.G,tmp.B));
+              
+              contract.methods.mint(catName,yourName,comment,favorite,parseInt(dayMet),imgURL,tmp.R,tmp.G,tmp.B).send({
+                from: klaytn.selectedAddress,
+                gas: 1500000
+                //value : caver.utils.toPeb('0.05', 'KLAY')
+              })).then(function(receipt){
+                console.log(receipt);
+                window.location.reload();
+              });
             }else 
             {
-              tx = await contractWithSigner.mint(catName,yourName,comment,favorite,parseInt(dayMet),imgURL,-1,-1,-1);
+              contract.methods.mint(catName,yourName,comment,favorite,parseInt(dayMet),imgURL,-1,-1,-1).send({
+                from: klaytn.selectedAddress,
+                gas: 1500000
+              }).then(function(receipt){
+                console.log(receipt);
+                window.location.reload();
+              });;
             }
-            console.log(tx);
-            const receipt = await tx.wait();
-            console.log(receipt);
-            window.location.reload();
+           
+           
           }
         }}>Make a star</Button>
       </Modal.Footer>

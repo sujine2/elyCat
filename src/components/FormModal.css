@@ -1,33 +1,30 @@
 @import url('https://fonts.googleapis.com/css2?family=Luxurious+Roman&family=Poppins:wght@300&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700&display=swap');
-@forward "node_modules/bootstrap/scss/bootstrap";
-
+@import url('https://fonts.googleapis.com/css2?family=Gabriela&display=swap');
 
 
 
 .formModalBody {
-    font-family: 'Luxurious Roman', cursive;
-    font-family: 'Noto Serif KR', serif;
+    font-family: 'Gabriela', serif;
     width: 100%;
-    
 }
 
-#contained-modal-title-vcenter {
+.colorHex {
     font-family: 'Luxurious Roman', cursive;
 }
 
 .modalTitle {
     float: left;
     width: 60%;
-    font-family: 'Luxurious Roman', cursive;
+    font-family: 'Gabriela', serif;
+    font-weight: 700;
     font-size: 30px;
-    font-weight: 10px;
+    margin-left: 20px;
 }
 
 .currentColor {
     float: left;
     width: 40%;
-    font-family: 'Luxurious Roman', cursive;
+    font-family: 'Gabriela', serif;
     font-size: 20px;
 }
 
@@ -39,6 +36,7 @@
 }
 
 .printColor {
+    font-family: 'Gabriela', serif;
     width: 20px;
     height: 20px;
     margin-left: 20px;
@@ -70,6 +68,7 @@ h4 {
 }
 
 .btn.btn-primary{
+    font-family: 'Gabriela', serif;
     background: rgb(4, 79, 96);
     border : 0;
     border-radius: 40px;

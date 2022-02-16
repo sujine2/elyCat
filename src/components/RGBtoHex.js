@@ -1,11 +1,13 @@
 import React from 'react';
 
 function componentToHex(c) {
-    //console.log("componentToHex");
-    //console.log(c);
-    var hex = c.toString(16);
-    return hex.length == 1 ? "0" + hex : hex;
-}
+    //console.log('type',typeof(c))
+    if(c!= undefined){
+      var hex = parseInt(c,10).toString(16);
+      return hex.length === 1 ? "0" + hex : hex;
+    }
+  }
+  
   
 
 function RGBtoHex (props) {

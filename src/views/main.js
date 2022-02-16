@@ -36,14 +36,15 @@ function Main() {
             <div className='head'>
                 <div className='imgCon'>
                     <img src={planet}></img>
-                    <br></br><br></br>
-                    <p> Welcome to ely-Cat </p>
+                    <br/>
+                    <p className='welcome'> Welcome to ely-Cat </p>
                 </div>
+                <br/>
                 <div className='des'>
                     You can keep memories with your cat as a shining star in the night sky.<br/>
                     Shine the stars with your own color. And be with other cat stars.
                 </div>
-                <br></br><br/>
+                <br/>
                 <div className='moveCon'>
                     <Link to="/stars" className='move'> 
                            >> Let's go see the stars <img className="rocket" src={rocket} ></img>

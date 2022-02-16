@@ -3,6 +3,7 @@ import {address, abi} from '../components/contract/contractInfo';
 import React, {useEffect} from 'react';
 import { ethers } from "ethers";
 import './Modal.css';
+import loadingImg from '../img/loading-img.gif';
 import jquery from 'jquery';
 import $ from 'jquery';
 import styled from 'styled-components';
@@ -29,8 +30,7 @@ function componentToHex(c) {
 
 
 function ViewModal(props) {
-  var url
-
+  var _id = false;
 
  
   const viewCatData = async () => {
@@ -59,6 +59,7 @@ function ViewModal(props) {
   useEffect(async ()=> {
     //console.log(catData);
     //console.log('R :', catData.catColor.R);
+
     const tempColorValue = "#"+ componentToHex(catData.catColor.R) + componentToHex(catData.catColor.G) + componentToHex(catData.catColor.B);
     //console.log('colorEffect:',tempColorValue);
     setColorEffect(tempColorValue);
@@ -83,10 +84,10 @@ function ViewModal(props) {
         }}>
       
             <div className='infoTitle'style={{ float: "left"}}>
-            {props.tokenid} 번째 {catData.catName} 별
+            {props.tokenid} 'th {catData.catName} 별
             </div>
             
-            <div style={{ marginLeft: 600, loat: "left"}}>
+            <div className='infoColor' style={{ marginLeft: 600, loat: "left"}}>
             {colorEffect}
             </div>
           
@@ -97,7 +98,7 @@ function ViewModal(props) {
           <br/>
           <h4> 별 소유자 : {catData.yourName}</h4>
           <br/>
-          <h4> 만난 날 : {catData.metDay}</h4>
+          <h4>  만난 날 : {catData.metDay}</h4>
           <br/>
           <h4> 좋아하는 것 : {catData.favorite}</h4>
           <br/><br/>
@@ -107,18 +108,28 @@ function ViewModal(props) {
           <br/>
         </div>
         <div className="dataImg">
+        <img className='showImg'style={{
+            }} src={loadingImg}/>
+
+          
           {
-          url = catData.imgURL,
-          console.log('url',url),
-          url && (
-          url = url.split('/'),
-          url = url[5],
-          console.log(url))
-          }
-          <img style={{
-            width : 500,
-            height : 500
-          }} src={"https://drive.google.com/uc?export=view&id=" + url}></img> 
+            _id = catData.imgURL,
+            _id && (
+            _id = _id.split('/'),
+            _id = _id[5],''
+            // <img style={{
+            //   width : 500,
+            //   height : 500
+            // }} src={"https://drive.google.com/uc?export=view&id="+ _id }/>
+          )}
+          
+         {
+            $('.showImg').attr('src', "https://drive.google.com/uc?export=view&id="+ _id ),
+            $('.showImg').css('marginLeft','' ),
+            $('.showImg').css('marginTop','' ),
+           _id=false
+
+         }
         </div>
 
       </Modal.Body>

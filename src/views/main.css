@@ -1,5 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Luxurious+Roman&family=Poppins:wght@300&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Luxurious+Roman&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Courgette&display=swap');
 * {
     box-sizing: content-box;
 }
@@ -125,6 +126,12 @@ html, body {
   -webkit-animation: fadein 3s; /* Safari and Chrome */
 }
 
+.welcome{
+  font-family: 'Courgette', cursive;
+  opacity: 0.9;
+  margin-top: 25px;
+}
+
 .moveCon {
   position: absolute;
 }
@@ -139,6 +146,7 @@ html, body {
   padding-left: 230px;
   -webkit-transition: all 0.1s linear;
   transition: all 0.1s linear;
+  opacity: 0.6;
 }
 
 .move:hover {
@@ -147,7 +155,8 @@ html, body {
   text-decoration-line: none;
   -webkit-transform: scale(1.1,1.1);
   -moz-transform: scale(1.1,1.1);
-  transform: scale(1.1,1.1);  
+  transform: scale(1.1,1.1); 
+  opacity: 0.9; 
 }
 
 .des{
