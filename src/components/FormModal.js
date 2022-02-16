@@ -173,8 +173,7 @@ function FormModal(props) {
             }} className="isColorDup"></span>
             {
             tmp = hexToRGB(colorValue),
-            tmp && (
-            console.log('color Value',tmp))}
+            tmp && (<></>)}
           </div>
           
         </div>
@@ -213,6 +212,12 @@ function FormModal(props) {
           if(colorDup === false && $('.changeColorCheck').is(':checked')){
             alert('이미 사용된 컬러 입니다. 색상을 변경해 주세요.');
           }else {
+            if(klaytn.selectedAddress == undefined ){
+              await klaytn.enable();
+            
+            } else if (klaytn === undefined) {
+              alert('Non-Kaikas browser detected. You should consider trying Kaikas!');
+            }
 
             //console.log('address', klaytn.selectedAddress);
             //const key = caver.wallet.keyring.generateSingleKey();

@@ -36,12 +36,14 @@
 }
 
 .printColor {
-    font-family: 'Gabriela', serif;
     width: 20px;
     height: 20px;
     margin-left: 20px;
     border-radius: 200%;
     box-shadow: 1px 1px 10px gray;
+}
+.printColorValue{
+    font-family: 'Luxurious Roman', cursive;
 }
 
 .changeColorCon{
