@@ -1,11 +1,8 @@
 module.exports = {
-    webpack: (config, {isServer}) => {
-        if(!isServer) {
-            config.node={
-                fs: 'empty'
-            }
-        }
-
-        return config
-    }
-}
+    webpack5: true,
+    webpack: (config) => {
+      config.resolve.fallback = { fs: false };
+  
+      return config;
+    },
+  };
